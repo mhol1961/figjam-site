@@ -5,6 +5,7 @@ import PageHero from '@/components/layout/PageHero'
 import CTASection from '@/components/layout/CTASection'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { aboutContent, siteConfig } from '@/data/site-content'
+import { assetPath } from '@/lib/utils'
 import { ClipboardList, Palette, Truck } from 'lucide-react'
 
 const steps = [
@@ -38,7 +39,7 @@ export default function AboutPage() {
           <AnimatedSection className="flex-1 min-w-[300px]">
             <div className="relative aspect-[3/4] max-w-[420px] rounded-sm overflow-hidden">
               <Image
-                src="/images/tasteful-option6.png"
+                src={assetPath("/images/tasteful-option6.png")}
                 alt="Fig Jam signature charcuterie board"
                 fill
                 className="object-cover"

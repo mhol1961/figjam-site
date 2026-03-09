@@ -6,6 +6,7 @@ import PageHero from '@/components/layout/PageHero'
 import CTASection from '@/components/layout/CTASection'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import CategoryFilter from '@/components/ui/CategoryFilter'
+import { assetPath } from '@/lib/utils'
 
 const galleryCategories = [
   { key: 'all', label: 'All' },
@@ -16,16 +17,16 @@ const galleryCategories = [
 ]
 
 const galleryItems = [
-  { id: 1, src: '/images/hero-board-image.png', category: 'boards', alt: 'Signature charcuterie board with salami roses', span: true },
-  { id: 2, src: '/images/tasteful-option1.png', category: 'cups', alt: 'Charcuterie cup at golden hour outdoor event', span: false },
-  { id: 3, src: '/images/tasteful-option2.png', category: 'boards', alt: 'Small board perfect for movie night', span: false },
-  { id: 4, src: '/images/tasteful-option3.png', category: 'picnic', alt: 'Beach picnic setup with wine and tiered display', span: true },
-  { id: 5, src: '/images/tasteful-option4.png', category: 'boards', alt: 'Tiered charcuterie display with stuffed peppers', span: false },
-  { id: 6, src: '/images/tasteful-option5.png', category: 'events', alt: 'Large board at a gathering with friends', span: false },
-  { id: 7, src: '/images/tasteful-option6.png', category: 'boards', alt: 'Overhead view of artisan board with salami roses', span: false },
-  { id: 8, src: '/images/hannah-testimonial-block-image.png', category: 'events', alt: '50th birthday celebration with charcuterie', span: true },
-  { id: 9, src: '/images/jared-testimonial-image.png', category: 'picnic', alt: 'Siesta Key beach picnic with rosé', span: false },
-  { id: 10, src: '/images/tasteful-option-page-customize-your-eperience.png', category: 'boards', alt: 'Artisanal cheese with berries close-up', span: false },
+  { id: 1, src: assetPath('/images/hero-board-image.png'), category: 'boards', alt: 'Signature charcuterie board with salami roses', span: true },
+  { id: 2, src: assetPath('/images/tasteful-option1.png'), category: 'cups', alt: 'Charcuterie cup at golden hour outdoor event', span: false },
+  { id: 3, src: assetPath('/images/tasteful-option2.png'), category: 'boards', alt: 'Small board perfect for movie night', span: false },
+  { id: 4, src: assetPath('/images/tasteful-option3.png'), category: 'picnic', alt: 'Beach picnic setup with wine and tiered display', span: true },
+  { id: 5, src: assetPath('/images/tasteful-option4.png'), category: 'boards', alt: 'Tiered charcuterie display with stuffed peppers', span: false },
+  { id: 6, src: assetPath('/images/tasteful-option5.png'), category: 'events', alt: 'Large board at a gathering with friends', span: false },
+  { id: 7, src: assetPath('/images/tasteful-option6.png'), category: 'boards', alt: 'Overhead view of artisan board with salami roses', span: false },
+  { id: 8, src: assetPath('/images/hannah-testimonial-block-image.png'), category: 'events', alt: '50th birthday celebration with charcuterie', span: true },
+  { id: 9, src: assetPath('/images/jared-testimonial-image.png'), category: 'picnic', alt: 'Siesta Key beach picnic with rosé', span: false },
+  { id: 10, src: assetPath('/images/tasteful-option-page-customize-your-eperience.png'), category: 'boards', alt: 'Artisanal cheese with berries close-up', span: false },
 ]
 
 export default function GalleryPage() {

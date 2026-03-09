@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { assetPath } from '@/lib/utils'
 
 // Map page titles to background images for visual impact
 const heroImages: Record<string, string> = {
@@ -12,13 +13,14 @@ const heroImages: Record<string, string> = {
   'Frequently Asked Questions': '/images/hero-board-image.png',
 }
 
+
 interface PageHeroProps {
   title: string
   subtitle?: string
 }
 
 export default function PageHero({ title, subtitle }: PageHeroProps) {
-  const bgImage = heroImages[title]
+  const bgImage = heroImages[title] ? assetPath(heroImages[title]) : undefined
 
   return (
     <section className="relative min-h-[50vh] flex items-end pb-16 pt-40 px-6 overflow-hidden">

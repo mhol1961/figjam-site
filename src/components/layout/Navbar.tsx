@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Phone } from 'lucide-react'
 import { navigation, siteConfig, announcementMessages } from '@/data/site-content'
+import { assetPath } from '@/lib/utils'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -74,7 +75,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center no-underline flex-shrink-0">
               {showTransparent ? (
                 <Image
-                  src="/images/fully-colorized-logo.png"
+                  src={assetPath("/images/fully-colorized-logo.png")}
                   alt="Fig Jam Charcuterie"
                   width={300}
                   height={300}
@@ -82,7 +83,7 @@ export default function Navbar() {
                 />
               ) : (
                 <Image
-                  src="/images/colorized-logo-transparent-bcgrnd.png"
+                  src={assetPath("/images/colorized-logo-transparent-bcgrnd.png")}
                   alt="Fig Jam Charcuterie"
                   width={300}
                   height={255}
@@ -166,7 +167,7 @@ export default function Navbar() {
               className="mb-10"
             >
               <Image
-                src="/images/fully-colorized-logo.png"
+                src={assetPath("/images/fully-colorized-logo.png")}
                 alt="Fig Jam Charcuterie"
                 width={300}
                 height={300}

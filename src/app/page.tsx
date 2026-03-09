@@ -17,14 +17,15 @@ import {
   aboutContent,
   cartService,
 } from '@/data/site-content'
+import { assetPath } from '@/lib/utils'
 import { ShoppingCart, UtensilsCrossed, Users, Sparkles } from 'lucide-react'
 
 const boardAccentColors = ['#8B9A7B', '#8B2E3B', '#C4953A', '#6B1D2A']
 const boardImages = [
-  '/images/tasteful-option1.png',  // Cups - outdoor golden hour
-  '/images/tasteful-option2.png',  // Small board - movie night
-  '/images/tasteful-option5.png',  // Medium - friends gathering
-  '/images/tasteful-option4.png',  // Large - tiered display
+  assetPath('/images/tasteful-option1.png'),
+  assetPath('/images/tasteful-option2.png'),
+  assetPath('/images/tasteful-option5.png'),
+  assetPath('/images/tasteful-option4.png'),
 ]
 
 export default function HomePage() {
@@ -39,7 +40,7 @@ export default function HomePage() {
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Background image */}
         <Image
-          src="/images/hero-board-image.png"
+          src={assetPath("/images/hero-board-image.png")}
           alt="Artisanal charcuterie board by Fig Jam"
           fill
           priority
@@ -133,7 +134,7 @@ export default function HomePage() {
           <AnimatedSection className="flex-1 min-w-[300px]">
             <div className="relative aspect-[3/4] max-w-[420px] rounded-sm overflow-hidden">
               <Image
-                src="/images/tasteful-option6.png"
+                src={assetPath("/images/tasteful-option6.png")}
                 alt="Fig Jam signature charcuterie board with salami roses"
                 fill
                 className="object-cover"
@@ -217,7 +218,7 @@ export default function HomePage() {
 
       {/* ====== PARALLAX DIVIDER ====== */}
       <ParallaxDivider
-        imageSrc="/images/tasteful-option3.png"
+        imageSrc={assetPath("/images/tasteful-option3.png")}
         alt="Fig Jam beach picnic with wine"
         quote="Fresh. Local. Made with love."
       />
@@ -229,7 +230,7 @@ export default function HomePage() {
       <section className="py-24 px-6 bg-gradient-to-br from-charcoal to-burgundy relative overflow-hidden">
         {/* Background image with overlay */}
         <Image
-          src="/images/tasteful-option5.png"
+          src={assetPath("/images/tasteful-option5.png")}
           alt="Charcuterie board at a gathering"
           fill
           className="object-cover opacity-15"

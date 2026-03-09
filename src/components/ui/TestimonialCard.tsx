@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Star } from 'lucide-react'
+import { assetPath } from '@/lib/utils'
 
 interface TestimonialCardProps {
   name: string
@@ -22,7 +23,7 @@ export default function TestimonialCard({
       {image && (
         <div className="relative h-[180px] overflow-hidden">
           <Image
-            src={image}
+            src={assetPath(image)}
             alt={`${name}'s ${occasion} with Fig Jam`}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"

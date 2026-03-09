@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { navigation, siteConfig } from '@/data/site-content'
+import { assetPath } from '@/lib/utils'
 
 export default function Footer() {
   return (
@@ -11,7 +12,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-4 mb-4">
               <Image
-                src="/images/fully-colorized-logo.png"
+                src={assetPath("/images/fully-colorized-logo.png")}
                 alt="Fig Jam Charcuterie"
                 width={200}
                 height={200}
@@ -75,7 +76,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} {siteConfig.businessName}. All rights reserved.
           </p>
           <Image
-            src="/images/fully-colorized-logo.png"
+            src={assetPath("/images/fully-colorized-logo.png")}
             alt="Fig Jam"
             width={40}
             height={40}

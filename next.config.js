@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
+const isGitHubPages = process.env.GITHUB_PAGES === 'true'
+const basePath = isGitHubPages ? '/figjam-site' : ''
+
 const nextConfig = {
   output: 'export',
-  basePath: process.env.GITHUB_PAGES === 'true' ? '/figjam-site' : '',
+  basePath,
+  assetPrefix: isGitHubPages ? '/figjam-site/' : undefined,
   images: {
     unoptimized: true,
     formats: ['image/avif', 'image/webp'],
@@ -11,6 +15,9 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
       },
     ],
+  },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
   },
 }
 

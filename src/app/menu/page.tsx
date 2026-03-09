@@ -8,13 +8,14 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import BoardCard from '@/components/ui/BoardCard'
 import CategoryFilter from '@/components/ui/CategoryFilter'
 import { boards, menuCategories } from '@/data/site-content'
+import { assetPath } from '@/lib/utils'
 
 const boardAccentColors = ['#8B9A7B', '#8B2E3B', '#C4953A', '#6B1D2A']
 const boardImages = [
-  '/images/tasteful-option1.png',
-  '/images/tasteful-option2.png',
-  '/images/tasteful-option5.png',
-  '/images/tasteful-option4.png',
+  assetPath('/images/tasteful-option1.png'),
+  assetPath('/images/tasteful-option2.png'),
+  assetPath('/images/tasteful-option5.png'),
+  assetPath('/images/tasteful-option4.png'),
 ]
 
 export default function MenuPage() {
@@ -63,7 +64,7 @@ export default function MenuPage() {
           <AnimatedSection>
             <div className="relative h-[300px] md:h-[400px] rounded-sm overflow-hidden">
               <Image
-                src="/images/tasteful-option-page-customize-your-eperience.png"
+                src={assetPath("/images/tasteful-option-page-customize-your-eperience.png")}
                 alt="Artisanal cheese and berries with rosé wine"
                 fill
                 className="object-cover"
