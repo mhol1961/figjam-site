@@ -1,0 +1,43 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# firecrawl
+.firecrawl/
+
+# reference screenshots (not site assets)
+public/images/homepage.png
+public/images/homepage-hero.png
+public/images/hero-menu-bar-after-slight-scroll.png
+public/images/live-original-hero.png
+public/images/live-site-scrolling-banner and hero section.png
