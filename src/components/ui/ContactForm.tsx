@@ -4,6 +4,7 @@ import { useState, useRef, FormEvent } from 'react'
 import { boards } from '@/data/site-content'
 
 const SUBMIT_TIMEOUT_MS = 15000
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit'
 
 const eventTypes = [
   'Date Night',
@@ -19,7 +20,7 @@ const eventTypes = [
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
-const WEBHOOK_URL = process.env.NEXT_PUBLIC_GHL_WEBHOOK_URL ?? ''
+const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? ''
 
 export default function ContactForm() {
   const [status, setStatus] = useState<SubmitState>('idle')
@@ -47,17 +48,24 @@ export default function ContactForm() {
 
     const formData = new FormData(e.currentTarget)
 
-    if (formData.get('website')) {
+    if (formData.get('botcheck')) {
       setStatus('success')
       return
     }
 
+    const name = String(formData.get('name') ?? '').trim()
+    const eventType = String(formData.get('event_type') ?? '')
+    const eventDate = String(formData.get('event_date') ?? '')
+
     const payload = {
-      name: String(formData.get('name') ?? '').trim(),
+      access_key: ACCESS_KEY,
+      subject: `New Fig Jam inquiry: ${name || 'Unknown'} - ${eventType || 'Event'}${eventDate ? ` on ${eventDate}` : ''}`,
+      from_name: 'Fig Jam Charcuterie Website',
+      name,
       phone: String(formData.get('phone') ?? '').trim(),
       email: String(formData.get('email') ?? '').trim(),
-      event_date: String(formData.get('event_date') ?? ''),
-      event_type: String(formData.get('event_type') ?? ''),
+      event_date: eventDate,
+      event_type: eventType,
       guest_count: Number(formData.get('guest_count')) || 0,
       board_size_interest: String(formData.get('board_size_interest') ?? ''),
       message: String(formData.get('message') ?? '').trim(),
@@ -66,8 +74,8 @@ export default function ContactForm() {
       idempotency_id: idempotencyId,
     }
 
-    if (!WEBHOOK_URL) {
-      console.error('NEXT_PUBLIC_GHL_WEBHOOK_URL is not configured.')
+    if (!ACCESS_KEY) {
+      console.error('NEXT_PUBLIC_WEB3FORMS_KEY is not configured.')
       setStatus('error')
       setErrorMsg(
         "We're having trouble submitting your inquiry. Please call us directly at 941-914-0007 and we'll get you taken care of right away."
@@ -80,15 +88,21 @@ export default function ContactForm() {
     const timeoutId = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS)
 
     try {
-      const res = await fetch(WEBHOOK_URL, {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify(payload),
         signal: controller.signal,
       })
       clearTimeout(timeoutId)
 
-      if (!res.ok) throw new Error(`Webhook returned ${res.status}`)
+      const data = await res.json().catch(() => ({ success: false }))
+      if (!res.ok || !data.success) {
+        throw new Error(`Web3Forms returned ${res.status}: ${data.message ?? 'unknown'}`)
+      }
       setStatus('success')
     } catch (err) {
       clearTimeout(timeoutId)
@@ -129,8 +143,8 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="hidden" aria-hidden="true">
         <label>
-          Website
-          <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+          Don&apos;t fill this out if you&apos;re human
+          <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
 
