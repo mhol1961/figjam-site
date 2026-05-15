@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   creator: 'Fig Jam Charcuterie LLC',
   publisher: 'Fig Jam Charcuterie LLC',
   alternates: {
-    canonical: '/',
+    canonical: SITE_URL,
   },
   openGraph: {
     title: 'Fig Jam Charcuterie LLC | Sarasota, FL',
