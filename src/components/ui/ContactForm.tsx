@@ -1,7 +1,9 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, useRef, FormEvent } from 'react'
 import { boards } from '@/data/site-content'
+
+const SUBMIT_TIMEOUT_MS = 15000
 
 const eventTypes = [
   'Date Night',
@@ -22,6 +24,14 @@ const WEBHOOK_URL = process.env.NEXT_PUBLIC_GHL_WEBHOOK_URL ?? ''
 export default function ContactForm() {
   const [status, setStatus] = useState<SubmitState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const isSubmittingRef = useRef(false)
+  const [idempotencyId] = useState(() =>
+    typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `fallback-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  )
+
+  const today = new Date().toISOString().slice(0, 10)
 
   const inputClasses =
     'w-full px-4 py-3 bg-white border border-light-gray rounded-sm font-body text-base text-charcoal placeholder:text-warm-gray/50 focus:outline-none focus:border-gold transition-colors'
@@ -30,6 +40,8 @@ export default function ContactForm() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (isSubmittingRef.current) return
+    isSubmittingRef.current = true
     setStatus('submitting')
     setErrorMsg('')
 
@@ -51,6 +63,7 @@ export default function ContactForm() {
       message: String(formData.get('message') ?? '').trim(),
       source: 'figjamcharcuteriellc.com contact form',
       submitted_at: new Date().toISOString(),
+      idempotency_id: idempotencyId,
     }
 
     if (!WEBHOOK_URL) {
@@ -59,24 +72,35 @@ export default function ContactForm() {
       setErrorMsg(
         "We're having trouble submitting your inquiry. Please call us directly at 941-914-0007 and we'll get you taken care of right away."
       )
+      isSubmittingRef.current = false
       return
     }
+
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS)
 
     try {
       const res = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       })
+      clearTimeout(timeoutId)
 
       if (!res.ok) throw new Error(`Webhook returned ${res.status}`)
       setStatus('success')
     } catch (err) {
-      console.error('Form submission failed:', err)
+      clearTimeout(timeoutId)
+      const timedOut = err instanceof Error && err.name === 'AbortError'
+      console.error('Form submission failed:', timedOut ? 'timeout' : err)
       setStatus('error')
       setErrorMsg(
-        "Something went wrong sending your inquiry. Please call us at 941-914-0007 or email directly — we'll respond within 24 hours."
+        timedOut
+          ? "Your submission timed out. Please call us at 941-914-0007 — we'll get you taken care of right away."
+          : "Something went wrong sending your inquiry. Please call us at 941-914-0007 or email directly — we'll respond within 24 hours."
       )
+      isSubmittingRef.current = false
     }
   }
 
@@ -102,7 +126,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="hidden" aria-hidden="true">
         <label>
           Website
@@ -147,7 +171,7 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className={labelClasses}>Event Date</label>
-          <input type="date" name="event_date" className={inputClasses} />
+          <input type="date" name="event_date" min={today} className={inputClasses} />
         </div>
         <div>
           <label className={labelClasses}>Event Type</label>

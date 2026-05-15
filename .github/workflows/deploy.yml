@@ -21,6 +21,18 @@ jobs:
 
       - run: npm ci
 
+      - name: Verify webhook URL secret is configured
+        env:
+          WEBHOOK_URL: ${{ secrets.NEXT_PUBLIC_GHL_WEBHOOK_URL }}
+        run: |
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo "ERROR: NEXT_PUBLIC_GHL_WEBHOOK_URL secret is empty or missing."
+            echo "Set it in repo Settings -> Secrets and variables -> Actions before deploying."
+            echo "Failing the build to prevent shipping a site with a broken contact form."
+            exit 1
+          fi
+          echo "Webhook URL secret is configured."
+
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'
