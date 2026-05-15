@@ -7,6 +7,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import BoardCard from '@/components/ui/BoardCard'
 import TestimonialCard from '@/components/ui/TestimonialCard'
 import SocialProofBar from '@/components/ui/SocialProofBar'
+import PricingGlance from '@/components/ui/PricingGlance'
 import ProcessSteps from '@/components/ui/ProcessSteps'
 import ParallaxDivider from '@/components/ui/ParallaxDivider'
 import CTASection from '@/components/layout/CTASection'
@@ -127,6 +128,9 @@ export default function HomePage() {
           <div className="w-px h-10 bg-gradient-to-b from-cream to-transparent animate-pulse-slow" />
         </div>
       </section>
+
+      {/* ====== PRICING AT A GLANCE ====== */}
+      <PricingGlance />
 
       {/* ====== ABOUT PREVIEW ====== */}
       <section className="py-24 px-6 bg-cream">
