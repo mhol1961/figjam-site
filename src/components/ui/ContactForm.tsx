@@ -57,13 +57,15 @@ export default function ContactForm() {
     const eventType = String(formData.get('event_type') ?? '')
     const eventDate = String(formData.get('event_date') ?? '')
 
+    const submitterEmail = String(formData.get('email') ?? '').trim()
+
     const payload = {
       access_key: ACCESS_KEY,
       subject: `New Fig Jam inquiry: ${name || 'Unknown'} - ${eventType || 'Event'}${eventDate ? ` on ${eventDate}` : ''}`,
-      from_name: 'Fig Jam Charcuterie Website',
+      replyto: submitterEmail,
       name,
       phone: String(formData.get('phone') ?? '').trim(),
-      email: String(formData.get('email') ?? '').trim(),
+      email: submitterEmail,
       event_date: eventDate,
       event_type: eventType,
       guest_count: Number(formData.get('guest_count')) || 0,
