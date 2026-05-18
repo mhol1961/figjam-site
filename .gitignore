@@ -41,3 +41,6 @@ public/images/homepage-hero.png
 public/images/hero-menu-bar-after-slight-scroll.png
 public/images/live-original-hero.png
 public/images/live-site-scrolling-banner and hero section.png
+
+# claude-mem auto-generated context files in workflow dirs
+.github/**/CLAUDE.md
