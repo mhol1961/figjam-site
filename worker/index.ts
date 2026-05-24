@@ -21,8 +21,14 @@ interface ContactPayload {
   idempotencyId?: string;
 }
 
-const RECIPIENT = 'izzy57@myyahoo.com';
-const CC = 'mhollandanalyst@gmail.com';
+// IMPORTANT — Resend sandbox constraint:
+// While sending FROM `onboarding@resend.dev` (no verified domain), Resend
+// only delivers TO the email address registered on the Resend account.
+// That's mhollandanalyst@gmail.com. Liz's Yahoo address and any CC will be
+// rejected with HTTP 403. Once a domain is verified on Resend, switch FROM
+// to noreply@<verified-domain>, restore Liz as RECIPIENT, and uncomment CC.
+const RECIPIENT = 'mhollandanalyst@gmail.com';
+// const CC = 'mhollandanalyst@gmail.com';
 const FROM = 'Fig Jam Charcuterie <onboarding@resend.dev>';
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 
@@ -108,7 +114,6 @@ export default {
         body: JSON.stringify({
           from: FROM,
           to: [RECIPIENT],
-          cc: [CC],
           reply_to: [email],
           subject,
           html,
@@ -120,7 +125,12 @@ export default {
         const errorBody = await resendRes.text();
         console.error('Resend API error', resendRes.status, errorBody);
         return jsonResponse(
-          { success: false, message: 'Email service rejected the request.' },
+          {
+            success: false,
+            message: 'Email service rejected the request.',
+            resendStatus: resendRes.status,
+            resendBody: errorBody.slice(0, 500),
+          },
           502
         );
       }
