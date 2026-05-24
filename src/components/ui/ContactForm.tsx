@@ -3,6 +3,9 @@
 import { useState, useRef, FormEvent } from 'react'
 import { boards } from '@/data/site-content'
 
+// Web3Forms displays custom JSON keys verbatim in the recipient's email,
+// so we use Title Case with spaces for human-readable field labels.
+
 const SUBMIT_TIMEOUT_MS = 15000
 const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit'
 
@@ -26,11 +29,6 @@ export default function ContactForm() {
   const [status, setStatus] = useState<SubmitState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const isSubmittingRef = useRef(false)
-  const [idempotencyId] = useState(() =>
-    typeof crypto !== 'undefined' && 'randomUUID' in crypto
-      ? crypto.randomUUID()
-      : `fallback-${Date.now()}-${Math.random().toString(36).slice(2)}`
-  )
 
   const today = new Date().toISOString().slice(0, 10)
 
@@ -61,19 +59,16 @@ export default function ContactForm() {
 
     const payload = {
       access_key: ACCESS_KEY,
-      subject: `New Fig Jam inquiry: ${name || 'Unknown'} - ${eventType || 'Event'}${eventDate ? ` on ${eventDate}` : ''}`,
+      subject: `New Fig Jam inquiry: ${name || 'Unknown'} — ${eventType || 'Event'}${eventDate ? ` on ${eventDate}` : ''}`,
       replyto: submitterEmail,
-      name,
-      phone: String(formData.get('phone') ?? '').trim(),
-      email: submitterEmail,
-      event_date: eventDate,
-      event_type: eventType,
-      guest_count: Number(formData.get('guest_count')) || 0,
-      board_size_interest: String(formData.get('board_size_interest') ?? ''),
-      message: String(formData.get('message') ?? '').trim(),
-      source: 'figjamcharcuteriellc.com contact form',
-      submitted_at: new Date().toISOString(),
-      idempotency_id: idempotencyId,
+      Name: name,
+      Phone: String(formData.get('phone') ?? '').trim(),
+      Email: submitterEmail,
+      'Event Date': eventDate,
+      'Event Type': eventType,
+      'Guest Count': Number(formData.get('guest_count')) || 0,
+      'Board Size': String(formData.get('board_size_interest') ?? ''),
+      Message: String(formData.get('message') ?? '').trim(),
     }
 
     if (!ACCESS_KEY) {
@@ -190,9 +185,9 @@ export default function ContactForm() {
           <input type="date" name="event_date" min={today} className={inputClasses} />
         </div>
         <div>
-          <label className={labelClasses}>Event Type</label>
-          <select name="event_type" className={inputClasses} defaultValue="">
-            <option value="">Select type...</option>
+          <label className={labelClasses}>Event Type *</label>
+          <select name="event_type" required className={inputClasses} defaultValue="">
+            <option value="" disabled>Select type...</option>
             {eventTypes.map((t) => (
               <option key={t} value={t}>
                 {t}
