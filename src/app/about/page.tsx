@@ -76,6 +76,22 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="px-6 pb-8 bg-cream">
+        <div className="max-w-[1100px] mx-auto">
+          <AnimatedSection>
+            <div className="relative aspect-[21/9] rounded-sm overflow-hidden">
+              <Image
+                src={assetPath('/images/flowers.png')}
+                alt="Elizabeth Kent of Fig Jam Charcuterie with a fresh bouquet"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1100px) 100vw, 1100px"
+              />
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
       <section className="py-24 px-6 bg-warm-white">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>

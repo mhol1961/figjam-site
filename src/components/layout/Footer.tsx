@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Instagram, Facebook } from 'lucide-react'
 import { navigation, siteConfig } from '@/data/site-content'
 import { assetPath } from '@/lib/utils'
 
@@ -67,6 +68,33 @@ export default function Footer() {
             <p className="font-body text-base text-white/40 mt-1">
               Fresh · Made to Order
             </p>
+
+            {(siteConfig.socialMedia.instagram || siteConfig.socialMedia.facebook) && (
+              <div className="mt-6 flex items-center gap-3">
+                {siteConfig.socialMedia.instagram && (
+                  <a
+                    href={siteConfig.socialMedia.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Follow Fig Jam Charcuterie on Instagram"
+                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-cream/70 hover:text-gold hover:border-gold transition-colors"
+                  >
+                    <Instagram size={18} />
+                  </a>
+                )}
+                {siteConfig.socialMedia.facebook && (
+                  <a
+                    href={siteConfig.socialMedia.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Follow Fig Jam Charcuterie on Facebook"
+                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-cream/70 hover:text-gold hover:border-gold transition-colors"
+                  >
+                    <Facebook size={18} />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

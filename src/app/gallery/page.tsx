@@ -27,6 +27,14 @@ const galleryItems = [
   { id: 8, src: assetPath('/images/hannah-testimonial-block-image.png'), category: 'events', alt: '50th birthday celebration with charcuterie', span: true },
   { id: 9, src: assetPath('/images/jared-testimonial-image.png'), category: 'picnic', alt: 'Siesta Key beach picnic with rosé', span: false },
   { id: 10, src: assetPath('/images/tasteful-option-page-customize-your-eperience.png'), category: 'boards', alt: 'Artisanal cheese with berries close-up', span: false },
+  { id: 11, src: assetPath('/images/liz-holding-charcuteri-board-at-party.png'), category: 'events', alt: 'Elizabeth presenting a Fig Jam charcuterie board at a private event', span: true },
+  { id: 12, src: assetPath('/images/sip-and-shop.png'), category: 'events', alt: 'Fig Jam charcuterie at a Sarasota sip & shop event', span: false },
+  { id: 13, src: assetPath('/images/srq-expo-cocktail-derby-party.png'), category: 'events', alt: 'Charcuterie spread at SRQ Expo cocktail derby party', span: false },
+  { id: 14, src: assetPath('/images/figjam-nice-table-layout.png'), category: 'events', alt: 'Elegant Fig Jam charcuterie table layout for a private gathering', span: true },
+  { id: 15, src: assetPath('/images/figjam-charcuterie-cart-two-young-ladies.png'), category: 'events', alt: 'Fig Jam charcuterie cart with hostesses serving guests', span: false },
+  { id: 16, src: assetPath('/images/charcuterie-weekend-pic.png'), category: 'boards', alt: 'Weekend charcuterie spread featuring seasonal favorites', span: false },
+  { id: 17, src: assetPath('/images/fruity-charcuterie-board.png'), category: 'boards', alt: 'Fruit-forward Fig Jam charcuterie board with berries and stone fruit', span: false },
+  { id: 18, src: assetPath('/images/nice-charcuterie-board-many-items.png'), category: 'boards', alt: 'Generous Fig Jam charcuterie board with a wide variety of cheeses, meats, and accompaniments', span: true },
 ]
 
 export default function GalleryPage() {

@@ -1,10 +1,12 @@
 'use client'
 
+import Image from 'next/image'
 import PageHero from '@/components/layout/PageHero'
 import CTASection from '@/components/layout/CTASection'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import ContactForm from '@/components/ui/ContactForm'
 import { cartService } from '@/data/site-content'
+import { assetPath } from '@/lib/utils'
 import { ShoppingCart, UtensilsCrossed, User, PenTool } from 'lucide-react'
 
 const iconMap = {
@@ -21,6 +23,25 @@ export default function CartServicePage() {
         title="Charcuterie Cart Experience"
         subtitle="Full-service catering that elevates any event"
       />
+
+      <section className="px-6 -mt-12 relative z-10">
+        <div className="max-w-[1100px] mx-auto">
+          <AnimatedSection>
+            <div className="relative aspect-[16/9] rounded-sm overflow-hidden shadow-2xl">
+              <Image
+                src={assetPath('/images/figjam-charcuterie-cart-two-young-ladies.png')}
+                alt="Fig Jam charcuterie cart at a Sarasota event with hostesses serving guests"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1100px) 100vw, 1100px"
+                priority
+              />
+              <div className="absolute -top-0.5 -left-0.5 w-[60px] h-[60px] border-t-[3px] border-l-[3px] border-gold" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-[60px] h-[60px] border-b-[3px] border-r-[3px] border-gold" />
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
 
       <section className="py-24 px-6 bg-warm-white">
         <div className="max-w-[1100px] mx-auto">

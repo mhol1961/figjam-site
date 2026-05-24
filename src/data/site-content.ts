@@ -15,8 +15,8 @@ export const siteConfig = {
   state: "FL",
   owner: "Elizabeth Kent",
   socialMedia: {
-    instagram: "", // TODO: Get from Elizabeth
-    facebook: "", // TODO: Get from Elizabeth
+    instagram: "https://www.instagram.com/fig_jam_charcuterie_llc/",
+    facebook: "https://www.facebook.com/profile.php?id=61580730700654",
   },
 };
 
