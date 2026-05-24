@@ -3,11 +3,8 @@
 import { useState, useRef, FormEvent } from 'react'
 import { boards } from '@/data/site-content'
 
-// Web3Forms displays custom JSON keys verbatim in the recipient's email,
-// so we use Title Case with spaces for human-readable field labels.
-
 const SUBMIT_TIMEOUT_MS = 15000
-const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit'
+const CONTACT_ENDPOINT = '/api/contact'
 
 const eventTypes = [
   'Date Night',
@@ -23,12 +20,17 @@ const eventTypes = [
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? ''
-
 export default function ContactForm() {
   const [status, setStatus] = useState<SubmitState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const isSubmittingRef = useRef(false)
+  // Stable idempotency id for this form instance — survives retries so the
+  // Worker (and recipient) can spot duplicate submissions from a timed-out client.
+  const [idempotencyId] = useState(() =>
+    typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `fallback-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  )
 
   const today = new Date().toISOString().slice(0, 10)
 
@@ -51,41 +53,23 @@ export default function ContactForm() {
       return
     }
 
-    const name = String(formData.get('name') ?? '').trim()
-    const eventType = String(formData.get('event_type') ?? '')
-    const eventDate = String(formData.get('event_date') ?? '')
-
-    const submitterEmail = String(formData.get('email') ?? '').trim()
-
     const payload = {
-      access_key: ACCESS_KEY,
-      subject: `New Fig Jam inquiry: ${name || 'Unknown'} — ${eventType || 'Event'}${eventDate ? ` on ${eventDate}` : ''}`,
-      replyto: submitterEmail,
-      Name: name,
-      Phone: String(formData.get('phone') ?? '').trim(),
-      Email: submitterEmail,
-      'Event Date': eventDate,
-      'Event Type': eventType,
-      'Guest Count': Number(formData.get('guest_count')) || 0,
-      'Board Size': String(formData.get('board_size_interest') ?? ''),
-      Message: String(formData.get('message') ?? '').trim(),
-    }
-
-    if (!ACCESS_KEY) {
-      console.error('NEXT_PUBLIC_WEB3FORMS_KEY is not configured.')
-      setStatus('error')
-      setErrorMsg(
-        "We're having trouble submitting your inquiry. Please call us directly at 941-914-0007 and we'll get you taken care of right away."
-      )
-      isSubmittingRef.current = false
-      return
+      name: String(formData.get('name') ?? '').trim(),
+      phone: String(formData.get('phone') ?? '').trim(),
+      email: String(formData.get('email') ?? '').trim(),
+      eventDate: String(formData.get('event_date') ?? ''),
+      eventType: String(formData.get('event_type') ?? ''),
+      guestCount: Number(formData.get('guest_count')) || 0,
+      boardSize: String(formData.get('board_size_interest') ?? ''),
+      message: String(formData.get('message') ?? '').trim(),
+      idempotencyId,
     }
 
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS)
 
     try {
-      const res = await fetch(WEB3FORMS_ENDPOINT, {
+      const res = await fetch(CONTACT_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +82,7 @@ export default function ContactForm() {
 
       const data = await res.json().catch(() => ({ success: false }))
       if (!res.ok || !data.success) {
-        throw new Error(`Web3Forms returned ${res.status}: ${data.message ?? 'unknown'}`)
+        throw new Error(`Contact API returned ${res.status}: ${data.message ?? 'unknown'}`)
       }
       setStatus('success')
     } catch (err) {
@@ -181,8 +165,14 @@ export default function ContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className={labelClasses}>Event Date</label>
-          <input type="date" name="event_date" min={today} className={inputClasses} />
+          <label className={labelClasses}>Event Date *</label>
+          <input
+            type="date"
+            name="event_date"
+            required
+            min={today}
+            className={inputClasses}
+          />
         </div>
         <div>
           <label className={labelClasses}>Event Type *</label>
@@ -199,19 +189,20 @@ export default function ContactForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className={labelClasses}>Estimated Guest Count</label>
+          <label className={labelClasses}>Guest Count *</label>
           <input
             type="number"
             name="guest_count"
             min="1"
+            required
             className={inputClasses}
             placeholder="Number of guests"
           />
         </div>
         <div>
-          <label className={labelClasses}>Board Size Interest</label>
-          <select name="board_size_interest" className={inputClasses} defaultValue="">
-            <option value="">Select size...</option>
+          <label className={labelClasses}>Board Size *</label>
+          <select name="board_size_interest" required className={inputClasses} defaultValue="">
+            <option value="" disabled>Select size...</option>
             {boards.map((b) => (
               <option key={b.id} value={b.name}>
                 {b.name} — {b.priceLabel}
